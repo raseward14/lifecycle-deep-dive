@@ -12,10 +12,12 @@ import {
   SimpleChanges,
 } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-lifecycle',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './lifecycle.component.html',
   styleUrl: './lifecycle.component.css',
 })
@@ -31,6 +33,7 @@ export class LifecycleComponent
     OnDestroy
 {
   @Input() text?: string;
+  @Input() dateTime?: Date;
 
   constructor() {
     console.log('CONSTRUCTOR');
