@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, DestroyRef, inject } from '@angular/core';
 
 import { LifecycleComponent } from "./lifecycle/lifecycle.component";
 
@@ -8,24 +8,31 @@ import { LifecycleComponent } from "./lifecycle/lifecycle.component";
   templateUrl: './app.component.html',
   imports: [LifecycleComponent]
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
   lifecycleComponentIsVisible = false;
   lifecycleInputText = 'Some Random Number: ' + Math.random() * 100;
   currentDateAndTime: Date = new Date();
 
-  intervalId: any;
+  // intervalId: any;
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit() {
-    this.intervalId = setInterval(() => {
+    const interval = setInterval(() => {
       this.currentDateAndTime = new Date();
     }, 1000);
+
+    this.destroyRef.onDestroy(() => {
+      if (interval) {
+        clearInterval(interval);
+      };
+    });
   }
 
-  ngOnDestroy() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
-  }
+  // ngOnDestroy() {
+  //   if (this.intervalId) {
+  //     clearInterval(this.intervalId);
+  //   }
+  // }
 
   onToggleLifecycleComponentVisibility() {
     this.lifecycleComponentIsVisible = !this.lifecycleComponentIsVisible;
